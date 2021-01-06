@@ -11,6 +11,12 @@
     <ClInclude Include="..\Source\Buffers.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Assets.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Shader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -28,6 +34,12 @@
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Buffers.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Assets.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Shader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

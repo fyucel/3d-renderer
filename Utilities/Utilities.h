@@ -4,10 +4,13 @@
 
 // STL headers:
 
+#include <fstream>
+
 #include <iostream>
 
 #include <sstream>
 
+#include <unordered_map>
 #include <unordered_set>
 
 // GLEW, GLM, and SDL dependencies
