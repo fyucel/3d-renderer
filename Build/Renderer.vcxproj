@@ -168,6 +168,7 @@
     <ClInclude Include="..\Source\Buffers.h" />
     <ClInclude Include="..\Source\Renderer.h" />
     <ClInclude Include="..\Source\Shader.h" />
+    <ClInclude Include="..\Source\Vertex.h" />
     <ClInclude Include="..\Utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>

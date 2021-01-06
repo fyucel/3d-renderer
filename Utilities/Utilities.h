@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+#include <memory>
+
 #include <sstream>
 
 #include <unordered_map>
@@ -22,6 +24,8 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <SDL.h>
+
+#include "Vertex.h"
 
 // Wrapper around OpenGL function calls to report any errors
 #define GL(x) x; GLLogCall(__FILE__, #x, __LINE__)

@@ -17,6 +17,9 @@
     <ClInclude Include="..\Source\Shader.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Vertex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
