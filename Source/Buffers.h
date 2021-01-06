@@ -11,6 +11,11 @@ public:
 
 private:
 	unsigned int id;
+
+	VertexBuffer(const VertexBuffer& other) = delete;
+	VertexBuffer(VertexBuffer&& other) = delete;
+	VertexBuffer& operator=(const VertexBuffer& other) = delete;
+	VertexBuffer& operator=(VertexBuffer&& other) = delete;
 };
 
 class IndexBuffer
@@ -27,6 +32,11 @@ public:
 private:
 	unsigned int id;
 	unsigned int count;
+
+	IndexBuffer(const IndexBuffer& other) = delete;
+	IndexBuffer(IndexBuffer&& other) = delete;
+	IndexBuffer& operator=(const IndexBuffer& other) = delete;
+	IndexBuffer& operator=(IndexBuffer&& other) = delete;
 };
 
 class VertexBufferLayout
@@ -96,4 +106,9 @@ private:
 	unsigned int id;
 
 	unsigned int SizeOfType(unsigned int vertexBufferElementType) const;
+
+	VertexArrayObject(const VertexArrayObject& other) = delete;
+	VertexArrayObject(VertexArrayObject&& other) = delete;
+	VertexArrayObject& operator=(const VertexArrayObject& other) = delete;
+	VertexArrayObject& operator=(VertexArrayObject&& other) = delete;
 };

@@ -65,6 +65,11 @@ private:
 	unsigned int id;
 	std::string filename;
 	int width, height;
+
+	Texture(const Texture& other) = delete;
+	Texture(Texture&& other) = delete;
+	Texture& operator=(const Texture& other) = delete;
+	Texture& operator=(Texture&& other) = delete;
 };
 
 class AssetContainer
