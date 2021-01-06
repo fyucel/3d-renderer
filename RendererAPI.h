@@ -65,3 +65,6 @@ public:
 
 	virtual IAdjustCamera* AdjustCamera() = 0;
 };
+
+// Creates a new renderer instance, giving ownership to the caller
+extern RENDERER_API IRenderer* InitializeRenderer();
