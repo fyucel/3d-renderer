@@ -121,3 +121,52 @@ void Texture::Unbind() const
 {
 	GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
+
+AssetContainer::AssetContainer()
+{
+	
+}
+
+Mesh* AssetContainer::GetMesh(MeshEnum meshEnum)
+{
+	if (meshes.find(meshEnum) == meshes.end())
+	{
+		std::cout << "Mesh: " << (int)meshEnum
+			<< " not found in the Asset Container" << std::endl;
+		return nullptr;
+	}
+	return meshes.at(meshEnum).get();
+}
+
+Texture* AssetContainer::GetTexture(TextureEnum textureEnum)
+{
+	if (textures.find(textureEnum) == textures.end())
+	{
+		std::cout << "Texture: " << (int)textureEnum
+			<< " not found in the Asset Container" << std::endl;
+		return nullptr;
+	}
+	return textures.at(textureEnum).get();
+}
+
+void AssetContainer::LoadMesh(MeshEnum meshToLoad, const std::string& filename,
+	float meshHeight)
+{
+	auto meshObj = OBJLoader(filename);
+	meshes[meshToLoad] = std::make_unique<Mesh>(
+		(Vertex*)meshObj.Vertices().data(),
+		meshObj.Vertices().size(),
+		(unsigned int*)meshObj.Indices().data(),
+		meshObj.Indices().size());
+}
+
+void AssetContainer::LoadTexture(TextureEnum textureToLoad,
+	const std::string& filename)
+{
+	textures[textureToLoad] = std::make_unique<Texture>(filename);
+}
+
+OBJLoader::OBJLoader(const std::string& filename)
+{
+	// TO DO: load OBJ files
+}

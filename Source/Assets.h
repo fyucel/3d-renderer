@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AssetEnums.h"
 #include "Buffers.h"
 #include "Shader.h"
 
@@ -64,4 +65,34 @@ private:
 	unsigned int id;
 	std::string filename;
 	int width, height;
+};
+
+class AssetContainer
+{
+public:
+	AssetContainer();
+
+	Mesh* GetMesh(MeshEnum meshEnum);
+	Texture* GetTexture(TextureEnum textureEnum);
+
+private:
+	std::unordered_map<MeshEnum, std::unique_ptr<Mesh>> meshes;
+	std::unordered_map<TextureEnum, std::unique_ptr<Texture>> textures;
+
+	void LoadMesh(MeshEnum meshToLoad, const std::string& filename,
+		float meshHeight = 0.0);
+	void LoadTexture(TextureEnum textureToLoad, const std::string& filename);
+};
+
+class OBJLoader
+{
+public:
+	OBJLoader(const std::string& filename);
+
+	inline const std::vector<Vertex>& Vertices() const { return vertices; }
+	inline const std::vector<unsigned int>& Indices() const { return indices; }
+
+private:
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
 };

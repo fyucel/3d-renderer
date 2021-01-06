@@ -25,8 +25,6 @@
 #include <gtc/type_ptr.hpp>
 #include <SDL.h>
 
-#include "Vertex.h"
-
 // Wrapper around OpenGL function calls to report any errors
 #define GL(x) x; GLLogCall(__FILE__, #x, __LINE__)
 static void GLLogCall(const char* file, const char* function, int line)
@@ -37,3 +35,17 @@ static void GLLogCall(const char* file, const char* function, int line)
 			<< ":" << std::dec << line << " (" << file << ") " << std::endl;
 	}
 }
+
+struct Vertex
+{
+	Vertex() : Position{ 0.0f }, TextureCoordinate{ 0.0f }, Normal{ 0.0f } {}
+
+	Vertex(glm::vec3 position, glm::vec2 textureCoordinate, glm::vec3 normal) :
+		Position{ position },
+		TextureCoordinate{ textureCoordinate },
+		Normal{ normal } {}
+
+	glm::vec3 Position;
+	glm::vec2 TextureCoordinate;
+	glm::vec3 Normal;
+};
