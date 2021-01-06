@@ -21,7 +21,7 @@ public:
 	void PanBackwards(float secondsElapsed, bool fastSpeed = false) override;
 	void ZoomIn(float secondsElapsed, bool fastSpeed) override;
 	void ZoomOut(float secondsElapsed, bool fastSpeed) override;
-	void Move(float offsetX, float offsetY, float secondsElapsed) override;
+	void Move(int offsetX, int offsetY, float secondsElapsed) override;
 
 private:
 	glm::mat4 viewMatrix;

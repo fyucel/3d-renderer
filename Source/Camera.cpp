@@ -101,10 +101,10 @@ void Camera::ZoomOut(float secondsElapsed, bool fastSpeed)
 		* secondsElapsed;
 }
 
-void Camera::Move(float offsetX, float offsetY, float secondsElapsed)
+void Camera::Move(int offsetX, int offsetY, float secondsElapsed)
 {
-	yaw += offsetX * secondsElapsed * MoveSpeed;
-	pitch += offsetY * secondsElapsed * MoveSpeed;
+	yaw += (float)offsetX * secondsElapsed * MoveSpeed;
+	pitch += (float)offsetY * secondsElapsed * MoveSpeed;
 
 	if (pitch > 80) pitch = 80.0f;
 	else if (pitch < -80) pitch = -80.0f;

@@ -38,7 +38,7 @@ IAdjustCamera* Renderer::AdjustCamera()
 
 void Renderer::ClearWindow()
 {
-	GL(glClearColor(0.85f, 0.95f, 1, 1));
+	GL(glClearColor(1, 1, 1, 1));
 	GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
 		| GL_STENCIL_BUFFER_BIT));
 }
@@ -114,7 +114,7 @@ void Renderer::InitializeSDLSubsystems()
 void Renderer::InitializeWindow()
 {
 	DetermineWindowSize();
-	window = SDL_CreateWindow("Real-Time Strategy Game", SDL_WINDOWPOS_CENTERED,
+	window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 

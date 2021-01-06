@@ -2,6 +2,7 @@
 
 #include "RendererAPI.h"
 
+#include <chrono>
 #include <memory>
 
 class InputHandler
@@ -10,17 +11,17 @@ public:
 	InputHandler();
 
 	// Polls for mouse and keyboard input to adjust the camera
-	void HandleInput(IAdjustCamera* adjustCamera);
+	bool HandleInput(IAdjustCamera* adjustCamera);
 
 private:
 	const unsigned char* keystate;
 
-	float mouseLocationX, mouseLocationY;
-	float previousMouseLocationX, previousMouseLocationY;
+	int mouseLocationX, mouseLocationY;
+	int previousMouseLocationX, previousMouseLocationY;
 
 	int lastCameraAdjustment; // ms
 
-	void ScrollCameraWithKeyboard(IAdjustCamera* adjustCamera);
+	void PanCameraWithKeyboard(IAdjustCamera* adjustCamera);
 	void MoveCameraWithMouse(IAdjustCamera* adjustCamera);
 	void ZoomCameraWithWheel(IAdjustCamera* adjustCamera,
 		int wheelDisplacement);

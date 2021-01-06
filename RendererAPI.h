@@ -53,7 +53,7 @@ public:
 	virtual void ZoomIn(float secondsElapsed, bool fastSpeed) = 0;
 	virtual void ZoomOut(float secondsElapsed, bool fastSpeed) = 0;
 
-	virtual void Move(float offsetX, float offsetY, float secondsElapsed) = 0;
+	virtual void Move(int offsetX, int offsetY, float secondsElapsed) = 0;
 };
 
 // Interface exposed to the client for telling when to render the entities
