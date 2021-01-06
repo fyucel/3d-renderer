@@ -8,6 +8,9 @@
     <ClInclude Include="..\Utilities\Utilities.h">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Buffers.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -23,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="..\Utilities\Utilities.cpp">
       <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Buffers.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
