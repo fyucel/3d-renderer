@@ -79,3 +79,45 @@ void Mesh::InitializeIndexBuffer(unsigned int* indicesArray,
 		numIndices);
 	indexBuffer->Unbind();
 }
+
+Texture::Texture(const std::string& path) :
+	width{ 0 }, height{ 0 }, filename{ path }
+{
+	int bits;
+
+	// TO DO: use SDL to load texture
+
+	unsigned char* localBuffer = nullptr;
+	// stbi_set_flip_vertically_on_load(1);
+	// localBuffer = stbi_load(path.c_str(), &width, &height, &bits, 4);
+
+	GL(glGenTextures(1, &id));
+	GL(glBindTexture(GL_TEXTURE_2D, id));
+
+	GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+	GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+	GL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+	GL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
+	GL(glBindTexture(GL_TEXTURE_2D, 0));
+
+	// if (localBuffer) stbi_image_free(localBuffer);
+}
+
+Texture::~Texture()
+{
+	GL(glDeleteTextures(1, &id));
+}
+
+void Texture::Bind(unsigned int slot) const
+{
+	GL(glActiveTexture(GL_TEXTURE0 + slot));
+	GL(glBindTexture(GL_TEXTURE_2D, id));
+}
+
+void Texture::Unbind() const
+{
+	GL(glBindTexture(GL_TEXTURE_2D, 0));
+}

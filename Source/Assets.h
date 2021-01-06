@@ -47,3 +47,21 @@ private:
 	void InitializeIndexBuffer(unsigned int* indicesArray,
 		const unsigned int numIndices);
 };
+
+class Texture
+{
+public:
+	Texture(const std::string& filename);
+	~Texture();
+
+	void Bind(unsigned int slot = 0) const;
+	void Unbind() const;
+
+	inline int Width() const { return width; }
+	inline int Height() const { return height; }
+
+private:
+	unsigned int id;
+	std::string filename;
+	int width, height;
+};
