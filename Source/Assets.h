@@ -13,10 +13,7 @@ public:
 		glm::vec3 rotation = glm::vec3(0.0f),
 		glm::vec3 scale = glm::vec3(1.0f));
 
-	void Render(Shader* shader);
-
-	void Bind() const;
-	void Unbind() const;
+	void Render(Shader* shaderToUse);
 
 	inline void Move(glm::vec3 position) { this->position += position; }
 	inline void Rotate(glm::vec3 rotation) { this->rotation += rotation; }
@@ -39,6 +36,9 @@ private:
 	std::unique_ptr<VertexBuffer> vertexBuffer;
 	std::unique_ptr<IndexBuffer> indexBuffer;
 	std::unique_ptr<VertexBufferLayout> vertexBufferLayout;
+
+	void Bind(Shader* shaderToUse) const;
+	void Unbind() const;
 
 	void UpdateModelMatrix();
 

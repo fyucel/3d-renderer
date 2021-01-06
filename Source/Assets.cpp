@@ -16,23 +16,24 @@ Mesh::Mesh(Vertex* verticesArray, const unsigned int numVertices,
 	Unbind();
 }
 
-void Mesh::Render(Shader* shader)
+void Mesh::Render(Shader* shaderToUse)
 {
 	UpdateModelMatrix();
-	shader->UniformMat4fv("modelMatrix", modelMatrix);
-
-	shader->Bind();
-	Bind();
+	Bind(shaderToUse);
 
 	GL(glDrawElements(GL_TRIANGLES, indexBuffer->Count(),
 		GL_UNSIGNED_INT, nullptr));
 }
 
-void Mesh::Bind() const
+void Mesh::Bind(Shader* shaderToUse) const
 {
+	shaderToUse->UniformMat4fv("modelMatrix", modelMatrix);
+
+	shaderToUse->Bind();
+
 	vertexArray->Bind();
 	vertexBuffer->Bind();
-	if (numIndices) indexBuffer->Bind();
+	indexBuffer->Bind();
 }
 
 void Mesh::Unbind() const
