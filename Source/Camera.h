@@ -15,10 +15,10 @@ public:
 	void Update();
 	void AdjustProjection(int windowWidth, int windowHeight);
 
-	void ScrollLeft(float secondsElapsed, bool fastSpeed = false) override;
-	void ScrollRight(float secondsElapsed, bool fastSpeed = false) override;
-	void ScrollForwards(float secondsElapsed, bool fastSpeed = false) override;
-	void ScrollBackwards(float secondsElapsed, bool fastSpeed = false) override;
+	void PanLeft(float secondsElapsed, bool fastSpeed = false) override;
+	void PanRight(float secondsElapsed, bool fastSpeed = false) override;
+	void PanForwards(float secondsElapsed, bool fastSpeed = false) override;
+	void PanBackwards(float secondsElapsed, bool fastSpeed = false) override;
 	void ZoomIn(float secondsElapsed, bool fastSpeed) override;
 	void ZoomOut(float secondsElapsed, bool fastSpeed) override;
 	void Move(float offsetX, float offsetY, float secondsElapsed) override;
@@ -44,8 +44,8 @@ private:
 	float aspectRatio; // %
 
 	static const float MoveSpeed;
-	static const float NormalScrollSpeed;
-	static const float FastScrollSpeed;
+	static const float NormalPanSpeed;
+	static const float FastPanSpeed;
 	static const float NormalZoomSpeed;
 	static const float FastZoomSpeed;
 

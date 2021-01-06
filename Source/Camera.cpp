@@ -11,7 +11,7 @@ Camera::Camera() :
 	worldUp{ 0.0f, 1.0f, 0.0f },
 	lightSource{ 0.0f, LightSourceYPosition, 0.0f },
 	pitch{ 0.0f },
-	yaw{ -90.0f },
+	yaw{ 0.0f },
 	fieldOfView{ DefaultFieldOfView },
 	nearPlane{ DefaultNearPlane },
 	farPlane{ DefaultFarPlane },
@@ -59,31 +59,31 @@ void Camera::AdjustProjection(int windowWidth, int windowHeight)
 		aspectRatio, nearPlane, farPlane);
 }
 
-void Camera::ScrollLeft(float secondsElapsed, bool fastSpeed)
+void Camera::PanLeft(float secondsElapsed, bool fastSpeed)
 {
-	position -= (fastSpeed ? FastScrollSpeed : NormalScrollSpeed)
+	position -= (fastSpeed ? FastPanSpeed : NormalPanSpeed)
 		* secondsElapsed * glm::normalize(glm::cross(front, up));
 }
 
-void Camera::ScrollRight(float secondsElapsed, bool fastSpeed)
+void Camera::PanRight(float secondsElapsed, bool fastSpeed)
 {
-	position += (fastSpeed ? FastScrollSpeed : NormalScrollSpeed)
+	position += (fastSpeed ? FastPanSpeed : NormalPanSpeed)
 		* secondsElapsed * glm::normalize(glm::cross(front, up));
 }
 
-void Camera::ScrollForwards(float secondsElapsed, bool fastSpeed)
+void Camera::PanForwards(float secondsElapsed, bool fastSpeed)
 {
 	// Do not change the position.z
-	auto result = (fastSpeed ? FastScrollSpeed : NormalScrollSpeed)
+	auto result = (fastSpeed ? FastPanSpeed : NormalPanSpeed)
 		* secondsElapsed * front;
 	position.x += result.x;
 	position.z += result.z;
 }
 
-void Camera::ScrollBackwards(float secondsElapsed, bool fastSpeed)
+void Camera::PanBackwards(float secondsElapsed, bool fastSpeed)
 {
 	// Do not change the position.z
-	auto result = (fastSpeed ? FastScrollSpeed : NormalScrollSpeed)
+	auto result = (fastSpeed ? FastPanSpeed : NormalPanSpeed)
 		* secondsElapsed * front;
 	position.x -= result.x;
 	position.z -= result.z;
@@ -117,8 +117,8 @@ const float Camera::DefaultNearPlane = 0.1f;
 const float Camera::DefaultFarPlane = 1000.0f;
 
 const float Camera::MoveSpeed = 10.0f;
-const float Camera::NormalScrollSpeed = 5.0f;
-const float Camera::FastScrollSpeed = 15.0f;
+const float Camera::NormalPanSpeed = 5.0f;
+const float Camera::FastPanSpeed = 15.0f;
 const float Camera::NormalZoomSpeed = 50.0f;
 const float Camera::FastZoomSpeed = 100.0f;
 

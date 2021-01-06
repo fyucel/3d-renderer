@@ -21,7 +21,9 @@ public:
 	virtual float RotationY() const = 0;
 	virtual float RotationZ() const = 0;
 
-	virtual float Scale() const = 0;
+	virtual float ScaleX() const = 0;
+	virtual float ScaleY() const = 0;
+	virtual float ScaleZ() const = 0;
 };
 
 // Implemented by the client to access the render info of entities
@@ -36,16 +38,16 @@ public:
 class RENDERER_API IAdjustCamera
 {
 public:
-	virtual void ScrollLeft(float secondsElapsed,
+	virtual void PanLeft(float secondsElapsed,
 		bool fastSpeed = false) = 0;
 
-	virtual void ScrollRight(float secondsElapsed,
+	virtual void PanRight(float secondsElapsed,
 		bool fastSpeed = false) = 0;
 
-	virtual void ScrollForwards(float secondsElapsed,
+	virtual void PanForwards(float secondsElapsed,
 		bool fastSpeed = false) = 0;
 
-	virtual void ScrollBackwards(float secondsElapsed,
+	virtual void PanBackwards(float secondsElapsed,
 		bool fastSpeed = false) = 0;
 
 	virtual void ZoomIn(float secondsElapsed, bool fastSpeed) = 0;
