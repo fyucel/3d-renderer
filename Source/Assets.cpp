@@ -125,7 +125,7 @@ void Texture::Unbind() const
 
 AssetContainer::AssetContainer()
 {
-	
+	LoadMesh(MeshEnum::Example, "../Assets/Objects/Example.obj");
 }
 
 Mesh* AssetContainer::GetMesh(MeshEnum meshEnum)
@@ -150,8 +150,7 @@ Texture* AssetContainer::GetTexture(TextureEnum textureEnum)
 	return textures.at(textureEnum).get();
 }
 
-void AssetContainer::LoadMesh(MeshEnum meshToLoad, const std::string& filename,
-	float meshHeight)
+void AssetContainer::LoadMesh(MeshEnum meshToLoad, const std::string& filename)
 {
 	auto meshObj = OBJLoader(filename);
 	meshes[meshToLoad] = std::make_unique<Mesh>(

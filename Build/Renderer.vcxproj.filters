@@ -23,6 +23,9 @@
     <ClInclude Include="..\Source\Camera.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\Utilities\OBJLoader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\Camera.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utilities\OBJLoader.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

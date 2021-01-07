@@ -1,5 +1,4 @@
 #include <SDL.h>
-#include <unordered_set>
 
 #include "Application.h"
 
@@ -9,12 +8,14 @@ InputHandler::InputHandler() :
 	mouseLocationY{ 0 },
 	previousMouseLocationX{ 0 },
 	previousMouseLocationY{ 0 },
-	lastCameraAdjustment{ 0 } {}
+	secondsSinceLastFrame{ 0.0f },
+	lastFrame{ 0 } {}
 
 bool InputHandler::HandleInput(IAdjustCamera* adjustCamera)
 {
-	keystate = SDL_GetKeyboardState(nullptr);
-	SDL_GetMouseState(&mouseLocationX, &mouseLocationY);
+	FetchKeystate();
+	FetchMouseState();
+	SecondsSinceLastFrame();
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -30,54 +31,61 @@ bool InputHandler::HandleInput(IAdjustCamera* adjustCamera)
 	}
 
 	PanCameraWithKeyboard(adjustCamera);
-	previousMouseLocationX = mouseLocationX;
-	previousMouseLocationY = mouseLocationY;
+
+	lastFrame = SDL_GetTicks();
 	return true;
 }
 
 void InputHandler::PanCameraWithKeyboard(IAdjustCamera* adjustCamera)
 {
-	float secondsElapsed = (SDL_GetTicks()
-		- (float)lastCameraAdjustment) / 1000.0f;
-
 	bool fastSpeed = keystate[SDL_SCANCODE_LSHIFT]
 		|| keystate[SDL_SCANCODE_RSHIFT];
 
 	if (keystate[SDL_SCANCODE_W] || keystate[SDL_SCANCODE_LEFT])
-		adjustCamera->PanForwards(secondsElapsed, fastSpeed);
+		adjustCamera->PanForwards(secondsSinceLastFrame, fastSpeed);
 	if (keystate[SDL_SCANCODE_A] || keystate[SDL_SCANCODE_RIGHT])
-		adjustCamera->PanLeft(secondsElapsed, fastSpeed);
+		adjustCamera->PanLeft(secondsSinceLastFrame, fastSpeed);
 	if (keystate[SDL_SCANCODE_S] || keystate[SDL_SCANCODE_DOWN])
-		adjustCamera->PanBackwards(secondsElapsed, fastSpeed);
+		adjustCamera->PanBackwards(secondsSinceLastFrame, fastSpeed);
 	if (keystate[SDL_SCANCODE_D] || keystate[SDL_SCANCODE_RIGHT])
-		adjustCamera->PanRight(secondsElapsed, fastSpeed);
-
-	lastCameraAdjustment = SDL_GetTicks();
+		adjustCamera->PanRight(secondsSinceLastFrame, fastSpeed);
 }
 
 void InputHandler::MoveCameraWithMouse(IAdjustCamera* adjustCamera)
 {
-	float secondsElapsed = (SDL_GetTicks()
-		- (float)lastCameraAdjustment) / 1000.0f;
-
 	int offsetX = mouseLocationX - previousMouseLocationX;
 	int offsetY = previousMouseLocationY - mouseLocationY;
-	adjustCamera->Move(offsetX, offsetY, secondsElapsed);
+	adjustCamera->Move(offsetX, offsetY, secondsSinceLastFrame);
 }
 
 void InputHandler::ZoomCameraWithWheel(IAdjustCamera* adjustCamera,
 	int wheelDisplacement)
 {
-	float secondsElapsed = (SDL_GetTicks()
-		- (float)lastCameraAdjustment) / 1000.0f;
-
 	bool fastSpeed = keystate[SDL_SCANCODE_LSHIFT]
 		|| keystate[SDL_SCANCODE_RSHIFT];
 
 	if (wheelDisplacement < 0)
-		adjustCamera->ZoomIn(secondsElapsed, fastSpeed);
+		adjustCamera->ZoomIn(secondsSinceLastFrame, fastSpeed);
 	else if (wheelDisplacement > 0)
-		adjustCamera->ZoomOut(secondsElapsed, fastSpeed);
+		adjustCamera->ZoomOut(secondsSinceLastFrame, fastSpeed);
+}
+
+void InputHandler::FetchKeystate()
+{
+	keystate = SDL_GetKeyboardState(nullptr);
+}
+
+void InputHandler::FetchMouseState()
+{
+	previousMouseLocationX = mouseLocationX;
+	previousMouseLocationY = mouseLocationY;
+	SDL_GetMouseState(&mouseLocationX, &mouseLocationY);
+}
+
+void InputHandler::SecondsSinceLastFrame()
+{
+	secondsSinceLastFrame = (SDL_GetTicks()
+		- (float)lastFrame) / 1000.0f;
 }
 
 EntityContainer::EntityContainer()

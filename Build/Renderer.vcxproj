@@ -170,6 +170,7 @@
     <ClInclude Include="..\Source\Camera.h" />
     <ClInclude Include="..\Source\Renderer.h" />
     <ClInclude Include="..\Source\Shader.h" />
+    <ClInclude Include="..\Utilities\OBJLoader.h" />
     <ClInclude Include="..\Utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +179,7 @@
     <ClCompile Include="..\Source\Camera.cpp" />
     <ClCompile Include="..\Source\Renderer.cpp" />
     <ClCompile Include="..\Source\Shader.cpp" />
+    <ClCompile Include="..\Utilities\OBJLoader.cpp" />
     <ClCompile Include="..\Utilities\Utilities.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
