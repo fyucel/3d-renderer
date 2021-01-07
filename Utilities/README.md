@@ -1,0 +1,1 @@
+Static utilities for the Renderer project
