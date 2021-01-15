@@ -178,7 +178,7 @@ bool Renderer::InitializeOpenGLContext()
 	GL(glFrontFace(GL_CCW));
 	GL(glEnable(GL_BLEND));
 	GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	GL(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+	GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
 
 	return true;
 }
@@ -196,7 +196,7 @@ bool Renderer::InitializeAssets()
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
 			"Failed to initialize shaders!",
-			"Make sure CoreVertex.glsl and CoreFragment.glsl\n"
+			"Ensure CoreVertex.glsl and CoreFragment.glsl\n"
 			"exist in the Assets/Shaders directory.", nullptr);
 		return false;
 	}
