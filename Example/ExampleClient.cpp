@@ -9,6 +9,8 @@
 
 #include "RendererAPI.h"
 
+// Handles mouse and keyboard input to adjust the camera position/orientation
+// and whether to close the application
 class InputHandler
 {
 public:
@@ -21,7 +23,7 @@ public:
 		secondsSinceLastFrame{ 0.0f },
 		lastFrame{ 0 } {}
 
-	// Polls for mouse and keyboard input to adjust the camera
+	// Returns whether the application should continue running
 	bool HandleInput(IAdjustCamera* adjustCamera)
 	{
 		FetchKeystate();
@@ -31,7 +33,8 @@ public:
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_QUIT) return false;
+			if (UserWantsToQuitApplication(&event))
+				return false;
 
 			if (event.button.button == SDL_BUTTON_MIDDLE
 				&& event.type == SDL_MOUSEMOTION)
@@ -58,6 +61,7 @@ private:
 
 	void PanCameraWithKeyboard(IAdjustCamera* adjustCamera)
 	{
+		// Pan camera with faster speed if the user is pressing the SHIFT key
 		bool fastSpeed = keystate[SDL_SCANCODE_LSHIFT]
 			|| keystate[SDL_SCANCODE_RSHIFT];
 
@@ -81,6 +85,7 @@ private:
 	void ZoomCameraWithMouseWheel(IAdjustCamera* adjustCamera,
 		int wheelDisplacement)
 	{
+		// Zoom camera with faster speed if the user is pressing the SHIFT key
 		bool fastSpeed = keystate[SDL_SCANCODE_LSHIFT]
 			|| keystate[SDL_SCANCODE_RSHIFT];
 
@@ -107,6 +112,15 @@ private:
 		secondsSinceLastFrame = (SDL_GetTicks()
 			- (float)lastFrame) / 1000.0f;
 	}
+
+	// Returns whether the user closed the application window
+	// or pressed the ALT + F4 keys
+	bool UserWantsToQuitApplication(SDL_Event* event)
+	{
+		return event->type == SDL_QUIT
+			|| ((keystate[SDL_SCANCODE_LALT] || keystate[SDL_SCANCODE_RALT])
+				&& keystate[SDL_SCANCODE_F4]);
+	}
 };
 
 enum class MeshEnum
@@ -119,6 +133,7 @@ enum class TextureEnum
 	Example,
 };
 
+// An object to render onto the screen
 class Entity : public IEntityRenderInfo
 {
 public:
@@ -184,10 +199,11 @@ class EntityContainer : public IAccessEntityRenderInfo
 public:
 	EntityContainer()
 	{
+		// Create an entity that uses the example mesh and texture
 		auto entity = std::make_unique<Entity>(
 			MeshEnum::Example, TextureEnum::Example);
 		entityRenderInfo.insert(entity.get());
-		entities[0] = std::move(entity);
+		entities.insert({ (int)entities.size(), std::move(entity) });
 	}
 
 	const std::unordered_set<IEntityRenderInfo*> EntitiesToRender() override
@@ -203,9 +219,7 @@ private:
 class Application
 {
 public:
-	Application() :
-		running{ false },
-		renderer{ InitializeRenderer() }
+	Application() : running{ false }, renderer{ InitializeRenderer() }
 	{
 		LoadRendererAssets();
 	}
@@ -215,7 +229,7 @@ public:
 		running = true;
 		while (running)
 		{
-			inputHandler.HandleInput(renderer->AdjustCamera());
+			running = inputHandler.HandleInput(renderer->AdjustCamera());
 			renderer->Render(&entityContainer);
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}

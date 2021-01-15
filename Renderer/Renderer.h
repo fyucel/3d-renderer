@@ -46,10 +46,10 @@ private:
 
 	void AdjustWindowSize();
 
-	void InitializeSDLSubsystems();
-	void InitializeWindow();
-	void InitializeOpenGLContext();
-	void InitializeAssets();
+	bool InitializeSDLSubsystems();
+	bool InitializeWindow();
+	bool InitializeOpenGLContext();
+	bool InitializeAssets();
 	void DetermineWindowSize();
 
 	Renderer(const Renderer& other) = delete;

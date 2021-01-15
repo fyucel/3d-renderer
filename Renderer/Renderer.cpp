@@ -3,10 +3,16 @@
 
 Renderer::Renderer()
 {
-	InitializeSDLSubsystems();
-	InitializeWindow();
-	InitializeOpenGLContext();
-	InitializeAssets();
+	if (!InitializeSDLSubsystems()
+		|| !InitializeWindow()
+		|| !InitializeOpenGLContext()
+		|| !InitializeAssets())
+	{
+		// Exit the application if initialization fails.
+		// The initializer function that failed will
+		// report its error through a message box.
+		exit(EXIT_FAILURE);
+	}
 }
 
 Renderer::~Renderer()
@@ -70,10 +76,14 @@ void Renderer::BindShader(Shader* shaderToBind)
 void Renderer::SendCameraUniforms(Shader* shaderToSendUniforms)
 {
 	BindShader(shaderToSendUniforms);
-	coreShader->UniformMat4fv("viewMatrix", camera.ViewMatrix());
-	coreShader->UniformMat4fv("projectionMatrix", camera.ProjectionMatrix());
-	coreShader->UniformVec3fv("cameraPosition", camera.Position());
-	coreShader->UniformVec3fv("lightSource", camera.LightSource());
+	shaderToSendUniforms->UniformMat4fv(
+		"viewMatrix", camera.ViewMatrix());
+	shaderToSendUniforms->UniformMat4fv(
+		"projectionMatrix", camera.ProjectionMatrix());
+	shaderToSendUniforms->UniformVec3fv(
+		"cameraPosition", camera.Position());
+	shaderToSendUniforms->UniformVec3fv(
+		"lightSource", camera.LightSource());
 }
 
 void Renderer::DrawEntity(Shader* shaderToUse,
@@ -83,21 +93,17 @@ void Renderer::DrawEntity(Shader* shaderToUse,
 
 	assetContainer->GetTexture((int)entityRenderInfo->TextureType())->Bind();
 
-	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Position(
-		glm::vec3(entityRenderInfo->PositionX(),
+	Mesh* mesh = assetContainer->GetMesh((int)entityRenderInfo->MeshType());
+	mesh->Position(glm::vec3(entityRenderInfo->PositionX(),
 			entityRenderInfo->PositionY(),
 			entityRenderInfo->PositionZ()));
-	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Rotatation(
-		glm::vec3(entityRenderInfo->RotationX(),
+	mesh->Rotatation(glm::vec3(entityRenderInfo->RotationX(),
 			entityRenderInfo->RotationY(),
 			entityRenderInfo->RotationZ()));
-	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Scale(
-		glm::vec3(entityRenderInfo->ScaleX(),
+	mesh->Scale(glm::vec3(entityRenderInfo->ScaleX(),
 			entityRenderInfo->ScaleY(),
 			entityRenderInfo->ScaleZ()));
-
-	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Render(
-		coreShader.get());
+	mesh->Render(coreShader.get());
 
 	assetContainer->GetTexture((int)entityRenderInfo->TextureType())->Unbind();
 }
@@ -114,21 +120,25 @@ void Renderer::AdjustWindowSize()
 	camera.AdjustProjection(windowWidth, windowHeight);
 }
 
-void Renderer::InitializeSDLSubsystems()
+bool Renderer::InitializeSDLSubsystems()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
-		std::cout << SDL_GetError() << std::endl;
-		throw "Failed to initialize SDL subsystem.";
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"Failed to initialize SDL subsystems!",
+			SDL_GetError(), nullptr);
+		return false;
 	}
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
 		SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, OpenGLVersionMajor);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, OpenGLVersionMinor);
+
+	return true;
 }
 
-void Renderer::InitializeWindow()
+bool Renderer::InitializeWindow()
 {
 	DetermineWindowSize();
 	window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_CENTERED,
@@ -137,40 +147,63 @@ void Renderer::InitializeWindow()
 
 	if (!window)
 	{
-		std::cout << SDL_GetError() << std::endl;
-		throw "Failed to initialize window.";
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"Failed to initialize window!",
+			SDL_GetError(), nullptr);
+		return false;
 	}
 	camera.AdjustProjection(windowWidth, windowHeight);
+	return window != nullptr;
 }
 
-void Renderer::InitializeOpenGLContext()
+bool Renderer::InitializeOpenGLContext()
 {
 	context = SDL_GL_CreateContext(window);
 	if (!context)
 	{
-		std::cout << SDL_GetError() << std::endl;
-		throw "Failed to initialize OpenGL context.";
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"Failed to initialize OpenGL context!",
+			SDL_GetError(), nullptr);
+		return false;
 	}
 
 	if (glewInit() != GLEW_OK)
-		throw "Failed to initialize GLEW.";
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"Failed to initialize GLEW!", "", nullptr);
+		return false;
+	}
 
 	GL(glEnable(GL_DEPTH_TEST));
 	GL(glFrontFace(GL_CCW));
 	GL(glEnable(GL_BLEND));
 	GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	GL(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+
+	return true;
 }
 
-void Renderer::InitializeAssets()
+bool Renderer::InitializeAssets()
 {
-	coreShader = std::make_unique<Shader>(
-		OpenGLVersionMajor, OpenGLVersionMinor,
-		"../Assets/Shaders/CoreVertex.glsl",
-		"../Assets/Shaders/CoreFragment.glsl");
+	try
+	{
+		coreShader = std::make_unique<Shader>(
+			OpenGLVersionMajor, OpenGLVersionMinor,
+			"../Assets/Shaders/CoreVertex.glsl",
+			"../Assets/Shaders/CoreFragment.glsl");
+	}
+	catch (...)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+			"Failed to initialize shaders!",
+			"Make sure CoreVertex.glsl and CoreFragment.glsl\n"
+			"exist in the Assets/Shaders directory.", nullptr);
+		return false;
+	}
 	assetContainer = std::make_unique<AssetContainer>();
-
 	currentlyBindedShader = nullptr;
+
+	return coreShader && assetContainer;
 }
 
 void Renderer::DetermineWindowSize()
