@@ -25,11 +25,11 @@ Abstracted rendering component that can be linked as a DLL to an existing C++ ap
 
 ### Demo:
 
-![](Teapots.gif)
-> *Navigating around teapot models with some moving, rotating, and/or enlarging, rendered with GL_LINE (polygon boundary edges drawn as line segments)*
-
 ![](Car.gif)
 > *Looking at a car model, rendered with GL_FILL (polygon interiors filled)*
+
+![](Teapots.gif)
+> *Navigating around teapot models with some moving, rotating, and/or enlarging, rendered with GL_LINE (polygon boundary edges drawn as line segments)*
 
 ---
 
