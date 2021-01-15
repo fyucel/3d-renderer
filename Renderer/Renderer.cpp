@@ -27,6 +27,7 @@ void Renderer::Render(IAccessEntityRenderInfo* accessEntityRenderInfo)
 	SendCameraUniforms(coreShader.get());
 
 	coreShader->Bind();
+	DrawEntities(accessEntityRenderInfo);
 
 	SwapWindow();
 }
@@ -34,6 +35,16 @@ void Renderer::Render(IAccessEntityRenderInfo* accessEntityRenderInfo)
 IAdjustCamera* Renderer::AdjustCamera()
 {
 	return &camera;
+}
+
+void Renderer::LoadMesh(int meshEnum, const std::string& filename)
+{
+	assetContainer->LoadMesh(meshEnum, filename);
+}
+
+void Renderer::LoadTexture(int textureEnum, const std::string& filename)
+{
+	assetContainer->LoadTexture(textureEnum, filename);
 }
 
 void Renderer::ClearWindow()
@@ -70,25 +81,31 @@ void Renderer::DrawEntity(Shader* shaderToUse,
 {
 	BindShader(shaderToUse);
 
-	assets->GetTexture((TextureEnum)entityRenderInfo->TextureType())->Bind();
+	assetContainer->GetTexture((int)entityRenderInfo->TextureType())->Bind();
 
-	assets->GetMesh((MeshEnum)entityRenderInfo->MeshType())->Position(
+	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Position(
 		glm::vec3(entityRenderInfo->PositionX(),
 			entityRenderInfo->PositionY(),
 			entityRenderInfo->PositionZ()));
-	assets->GetMesh((MeshEnum)entityRenderInfo->MeshType())->Rotatation(
+	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Rotatation(
 		glm::vec3(entityRenderInfo->RotationX(),
 			entityRenderInfo->RotationY(),
 			entityRenderInfo->RotationZ()));
-	assets->GetMesh((MeshEnum)entityRenderInfo->MeshType())->Scale(
+	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Scale(
 		glm::vec3(entityRenderInfo->ScaleX(),
 			entityRenderInfo->ScaleY(),
 			entityRenderInfo->ScaleZ()));
 
-	assets->GetMesh((MeshEnum)entityRenderInfo->MeshType())->Render(
+	assetContainer->GetMesh((int)entityRenderInfo->MeshType())->Render(
 		coreShader.get());
 
-	assets->GetTexture((TextureEnum)entityRenderInfo->TextureType())->Unbind();
+	assetContainer->GetTexture((int)entityRenderInfo->TextureType())->Unbind();
+}
+
+void Renderer::DrawEntities(IAccessEntityRenderInfo* accessEntityRenderInfo)
+{
+	for (auto& entity : accessEntityRenderInfo->EntitiesToRender())
+		DrawEntity(coreShader.get(), entity);
 }
 
 void Renderer::AdjustWindowSize()
@@ -142,7 +159,7 @@ void Renderer::InitializeOpenGLContext()
 	GL(glFrontFace(GL_CCW));
 	GL(glEnable(GL_BLEND));
 	GL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-	GL(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+	GL(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 }
 
 void Renderer::InitializeAssets()
@@ -151,7 +168,7 @@ void Renderer::InitializeAssets()
 		OpenGLVersionMajor, OpenGLVersionMinor,
 		"../Assets/Shaders/CoreVertex.glsl",
 		"../Assets/Shaders/CoreFragment.glsl");
-	assets = std::make_unique<AssetContainer>();
+	assetContainer = std::make_unique<AssetContainer>();
 
 	currentlyBindedShader = nullptr;
 }

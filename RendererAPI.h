@@ -6,7 +6,7 @@
 #define RENDERER_API __declspec(dllimport)
 #endif
 
-// Implemented by entities to tell the renderer how to draw the entity
+// Implemented by each entity to dictate how the renderer should draw them
 class RENDERER_API IEntityRenderInfo
 {
 public:
@@ -26,8 +26,7 @@ public:
 	virtual float ScaleZ() const = 0;
 };
 
-// Implemented by the client to access the render info of entities
-// that will be drawn by the renderer
+// Implemented by the client to send entities to the renderer for it to draw
 class RENDERER_API IAccessEntityRenderInfo
 {
 public:
@@ -56,14 +55,20 @@ public:
 	virtual void Move(int offsetX, int offsetY, float secondsElapsed) = 0;
 };
 
-// Interface exposed to the client for telling when to render the entities
-// and accessing the camera adjustment interface
+// Interface exposed to the client for telling when to render the entities,
+// accessing the camera adjustment interface, and loading mesh/texture files
 class RENDERER_API IRenderer
 {
 public:
 	virtual void Render(IAccessEntityRenderInfo* accessEntityRenderInfo) = 0;
 
 	virtual IAdjustCamera* AdjustCamera() = 0;
+
+	// Loads the mesh .obj file and stores internally as the enum value
+	virtual void LoadMesh(int meshEnum, const std::string& filename) = 0;
+
+	// Loads the texture .png file and stores internally as the enum value
+	virtual void LoadTexture(int textureEnum, const std::string& filename) = 0;
 };
 
 // Creates a new renderer instance, giving ownership to the caller

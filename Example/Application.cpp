@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <thread>
 
 #include "Application.h"
 
@@ -27,7 +28,7 @@ bool InputHandler::HandleInput(IAdjustCamera* adjustCamera)
 			MoveCameraWithMouse(adjustCamera);
 
 		if (event.type == SDL_MOUSEWHEEL)
-			ZoomCameraWithWheel(adjustCamera, event.wheel.y);
+			ZoomCameraWithMouseWheel(adjustCamera, event.wheel.y);
 	}
 
 	PanCameraWithKeyboard(adjustCamera);
@@ -58,7 +59,7 @@ void InputHandler::MoveCameraWithMouse(IAdjustCamera* adjustCamera)
 	adjustCamera->Move(offsetX, offsetY, secondsSinceLastFrame);
 }
 
-void InputHandler::ZoomCameraWithWheel(IAdjustCamera* adjustCamera,
+void InputHandler::ZoomCameraWithMouseWheel(IAdjustCamera* adjustCamera,
 	int wheelDisplacement)
 {
 	bool fastSpeed = keystate[SDL_SCANCODE_LSHIFT]
@@ -88,9 +89,101 @@ void InputHandler::SecondsSinceLastFrame()
 		- (float)lastFrame) / 1000.0f;
 }
 
+Entity::Entity(MeshEnum meshType, TextureEnum textureType) :
+	meshType{ meshType },
+	textureType{ textureType },
+	positionX{ 0.0f },
+	positionY{ 0.0f },
+	positionZ{ 0.0f },
+	rotationX{ 0.0f },
+	rotationY{ 0.0f },
+	rotationZ{ 0.0f },
+	scaleX{ 1.0f },
+	scaleY{ 1.0f },
+	scaleZ{ 1.0f } {}
+
+int Entity::MeshType() const
+{
+	return (int)meshType;
+}
+
+int Entity::TextureType() const
+{
+	return (int)textureType;
+}
+
+float Entity::PositionX() const
+{
+	return positionX;
+}
+
+float Entity::PositionY() const
+{
+	return positionY;
+}
+
+float Entity::PositionZ() const
+{
+	return positionZ;
+}
+
+float Entity::RotationX() const
+{
+	return rotationX;
+}
+
+float Entity::RotationY() const
+{
+	return rotationY;
+}
+
+float Entity::RotationZ() const
+{
+	return rotationZ;
+}
+
+float Entity::ScaleX() const
+{
+	return scaleX;
+}
+
+float Entity::ScaleY() const
+{
+	return scaleY;
+}
+
+float Entity::ScaleZ() const
+{
+	return scaleZ;
+}
+
+void Entity::Position(float x, float y, float z)
+{
+	positionX = x;
+	positionY = y;
+	positionZ = z;
+}
+
+void Entity::Rotation(float x, float y, float z)
+{
+	rotationX = x;
+	rotationY = y;
+	rotationZ = z;
+}
+
+void Entity::Scale(float x, float y, float z)
+{
+	scaleX = x;
+	scaleY = y;
+	scaleZ = z;
+}
+
 EntityContainer::EntityContainer()
 {
-
+	auto entity = std::make_unique<Entity>(
+		MeshEnum::Example, TextureEnum::Example);
+	entityRenderInfo.insert(entity.get());
+	entities[0] = std::move(entity);
 }
 
 const std::unordered_set<IEntityRenderInfo*> EntityContainer::EntitiesToRender()
@@ -100,17 +193,28 @@ const std::unordered_set<IEntityRenderInfo*> EntityContainer::EntitiesToRender()
 
 Application::Application() :
 	running{ false },
-	renderer{ InitializeRenderer() } {}
+	renderer{ InitializeRenderer() }
+{
+	LoadRendererAssets();
+}
 
 void Application::Run()
 {
 	running = true;
-
 	while (running)
 	{
 		inputHandler.HandleInput(renderer->AdjustCamera());
 		renderer->Render(&entityContainer);
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
+}
+
+void Application::LoadRendererAssets()
+{
+	renderer->LoadMesh((int)MeshEnum::Example,
+		"../Assets/Objects/Example.obj");
+	renderer->LoadTexture((int)TextureEnum::Example,
+		"../Assets/Textures/Example.png");
 }
 
 #undef main

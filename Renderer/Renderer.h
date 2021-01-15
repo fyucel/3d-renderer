@@ -15,14 +15,17 @@ public:
 
 	IAdjustCamera* AdjustCamera() override;
 
+	void LoadMesh(int meshEnum, const std::string& filename) override;
+	void LoadTexture(int textureEnum, const std::string& filename) override;
+
 private:
-	int windowWidth, windowHeight; // px
+	int windowWidth, windowHeight; // pixels
 
 	SDL_Window* window;
 	SDL_GLContext context;
 
 	Camera camera;
-	std::unique_ptr<AssetContainer> assets;
+	std::unique_ptr<AssetContainer> assetContainer;
 	std::unique_ptr<Shader> coreShader;
 
 	Shader* currentlyBindedShader;
@@ -39,6 +42,7 @@ private:
 	void SendCameraUniforms(Shader* shaderToSendUniforms);
 
 	void DrawEntity(Shader* shader, IEntityRenderInfo* entityRenderInfo);
+	void DrawEntities(IAccessEntityRenderInfo* accessEntityRenderInfo);
 
 	void AdjustWindowSize();
 

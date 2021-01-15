@@ -1,5 +1,6 @@
 #include "Utilities.h"
 #include "Assets.h"
+#include "Tools.h"
 
 Mesh::Mesh(Vertex* verticesArray, const unsigned int numVertices,
 	unsigned int* indicesArray, const unsigned int numIndices,
@@ -85,12 +86,9 @@ Texture::Texture(const std::string& path) :
 	width{ 0 }, height{ 0 }, filename{ path }
 {
 	int bits;
-
-	// TO DO: use SDL to load texture
-
-	unsigned char* localBuffer = nullptr;
-	// stbi_set_flip_vertically_on_load(1);
-	// localBuffer = stbi_load(path.c_str(), &width, &height, &bits, 4);
+	stbi_set_flip_vertically_on_load(1);
+	unsigned char* localBuffer = stbi_load(
+		path.c_str(), &width, &height, &bits, 4);
 
 	GL(glGenTextures(1, &id));
 	GL(glBindTexture(GL_TEXTURE_2D, id));
@@ -104,7 +102,7 @@ Texture::Texture(const std::string& path) :
 		GL_RGBA, GL_UNSIGNED_BYTE, localBuffer));
 	GL(glBindTexture(GL_TEXTURE_2D, 0));
 
-	// if (localBuffer) stbi_image_free(localBuffer);
+	if (localBuffer) stbi_image_free(localBuffer);
 }
 
 Texture::~Texture()
@@ -123,12 +121,7 @@ void Texture::Unbind() const
 	GL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-AssetContainer::AssetContainer()
-{
-	LoadMesh(MeshEnum::Example, "../Assets/Objects/Example.obj");
-}
-
-Mesh* AssetContainer::GetMesh(MeshEnum meshEnum)
+Mesh* AssetContainer::GetMesh(int meshEnum)
 {
 	if (meshes.find(meshEnum) == meshes.end())
 	{
@@ -139,7 +132,7 @@ Mesh* AssetContainer::GetMesh(MeshEnum meshEnum)
 	return meshes.at(meshEnum).get();
 }
 
-Texture* AssetContainer::GetTexture(TextureEnum textureEnum)
+Texture* AssetContainer::GetTexture(int textureEnum)
 {
 	if (textures.find(textureEnum) == textures.end())
 	{
@@ -150,17 +143,17 @@ Texture* AssetContainer::GetTexture(TextureEnum textureEnum)
 	return textures.at(textureEnum).get();
 }
 
-void AssetContainer::LoadMesh(MeshEnum meshToLoad, const std::string& filename)
+void AssetContainer::LoadMesh(int meshToLoad, const std::string& filename)
 {
 	auto meshObj = OBJLoader(filename);
 	meshes[meshToLoad] = std::make_unique<Mesh>(
 		(Vertex*)meshObj.Vertices().data(),
-		meshObj.Vertices().size(),
+		(unsigned int)meshObj.Vertices().size(),
 		(unsigned int*)meshObj.Indices().data(),
-		meshObj.Indices().size());
+		(unsigned int)meshObj.Indices().size());
 }
 
-void AssetContainer::LoadTexture(TextureEnum textureToLoad,
+void AssetContainer::LoadTexture(int textureToLoad,
 	const std::string& filename)
 {
 	textures[textureToLoad] = std::make_unique<Texture>(filename);
@@ -168,5 +161,13 @@ void AssetContainer::LoadTexture(TextureEnum textureToLoad,
 
 OBJLoader::OBJLoader(const std::string& filename)
 {
-	// TO DO: load OBJ files
+	auto indexedModel = OBJModel(filename).ToIndexedModel();
+	vertices.resize(indexedModel.vertices.size(), Vertex());
+	for (int vertex = 0; vertex < indexedModel.vertices.size(); vertex++)
+	{
+		vertices[vertex].Position = indexedModel.vertices[vertex];
+		vertices[vertex].TextureCoordinate = indexedModel.texCoords[vertex];
+		vertices[vertex].Normal = indexedModel.normals[vertex];
+	}
+	indices = indexedModel.indices;
 }

@@ -7872,6 +7872,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------------------------
 */
 
+#include <algorithm>
+#include <map>
+
 struct OBJIndex
 {
 	unsigned int vertexIndex;
@@ -7884,7 +7887,7 @@ struct OBJIndex
 class IndexedModel
 {
 public:
-	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> texCoords;
 	std::vector<glm::vec3> normals;
 	std::vector<unsigned int> indices;
@@ -7897,8 +7900,8 @@ public:
 			int i1 = indices[i + 1];
 			int i2 = indices[i + 2];
 
-			glm::vec3 v1 = positions[i1] - positions[i0];
-			glm::vec3 v2 = positions[i2] - positions[i0];
+			glm::vec3 v1 = vertices[i1] - vertices[i0];
+			glm::vec3 v2 = vertices[i2] - vertices[i0];
 
 			glm::vec3 normal = glm::normalize(glm::cross(v1, v2));
 
@@ -7907,7 +7910,7 @@ public:
 			normals[i2] += normal;
 		}
 
-		for (unsigned int i = 0; i < positions.size(); i++)
+		for (unsigned int i = 0; i < vertices.size(); i++)
 			normals[i] = glm::normalize(normals[i]);
     }
 };
@@ -7942,7 +7945,7 @@ public:
             {
                 getline(file, line);
 
-                unsigned int lineLength = line.length();
+                unsigned int lineLength = (unsigned int)line.length();
 
                 if (lineLength < 2)
                     continue;
@@ -7977,7 +7980,7 @@ public:
         IndexedModel result;
         IndexedModel normalModel;
 
-        unsigned int numIndices = OBJIndices.size();
+        unsigned int numIndices = (unsigned int)OBJIndices.size();
 
         std::vector<OBJIndex*> indexLookup;
 
@@ -8014,10 +8017,10 @@ public:
             std::map<OBJIndex, unsigned int>::iterator it = normalModelIndexMap.find(*currentIndex);
             if (it == normalModelIndexMap.end())
             {
-                normalModelIndex = normalModel.positions.size();
+                normalModelIndex = (unsigned int)normalModel.vertices.size();
 
                 normalModelIndexMap.insert(std::pair<OBJIndex, unsigned int>(*currentIndex, normalModelIndex));
-                normalModel.positions.push_back(currentPosition);
+                normalModel.vertices.push_back(currentPosition);
                 normalModel.texCoords.push_back(currentTexCoord);
                 normalModel.normals.push_back(currentNormal);
             }
@@ -8029,9 +8032,9 @@ public:
 
             if (previousVertexLocation == (unsigned int)-1)
             {
-                resultModelIndex = result.positions.size();
+                resultModelIndex = (unsigned int)result.vertices.size();
 
-                result.positions.push_back(currentPosition);
+                result.vertices.push_back(currentPosition);
                 result.texCoords.push_back(currentTexCoord);
                 result.normals.push_back(currentNormal);
             }
@@ -8047,7 +8050,7 @@ public:
         {
             normalModel.CalcNormals();
 
-            for (unsigned int i = 0; i < result.positions.size(); i++)
+            for (unsigned int i = 0; i < result.vertices.size(); i++)
                 result.normals[i] = normalModel.normals[indexMap[i]];
         }
 
@@ -8057,7 +8060,7 @@ private:
     unsigned int FindLastVertexIndex(const std::vector<OBJIndex*>& indexLookup, const OBJIndex* currentIndex, const IndexedModel& result)
     {
         unsigned int start = 0;
-        unsigned int end = indexLookup.size();
+        unsigned int end = (unsigned int)indexLookup.size();
         unsigned int current = (end - start) / 2 + start;
         unsigned int previous = start;
 
@@ -8108,9 +8111,9 @@ private:
                         else
                             currentNormal = glm::vec3(0, 0, 0);
 
-                        for (unsigned int j = 0; j < result.positions.size(); j++)
+                        for (unsigned int j = 0; j < result.vertices.size(); j++)
                         {
-                            if (currentPosition == result.positions[j]
+                            if (currentPosition == result.vertices[j]
                                 && ((!hasUVs || currentTexCoord == result.texCoords[j])
                                     && (!hasNormals || currentNormal == result.normals[j])))
                             {
@@ -8154,7 +8157,7 @@ private:
 
     glm::vec2 ParseOBJVec2(const std::string& line)
     {
-		unsigned int tokenLength = line.length();
+		unsigned int tokenLength = (unsigned int)line.length();
 		const char* tokenString = line.c_str();
 
 		unsigned int vertIndexStart = 3;
@@ -8179,7 +8182,7 @@ private:
     }
     glm::vec3 ParseOBJVec3(const std::string& line)
     {
-		unsigned int tokenLength = line.length();
+		unsigned int tokenLength = (unsigned int)line.length();
 		const char* tokenString = line.c_str();
 
 		unsigned int vertIndexStart = 2;
@@ -8209,7 +8212,7 @@ private:
     }
     OBJIndex ParseOBJIndex(const std::string& token, bool* hasUVs, bool* hasNormals)
     {
-		unsigned int tokenLength = token.length();
+		unsigned int tokenLength = (unsigned int)token.length();
 		const char* tokenString = token.c_str();
 
 		unsigned int vertIndexStart = 0;
@@ -8267,7 +8270,7 @@ static inline unsigned int ParseOBJIndexValue(const std::string& token, unsigned
 
 static inline float ParseOBJFloatValue(const std::string& token, unsigned int start, unsigned int end)
 {
-	return atof(token.substr(start, end - start).c_str());
+	return (float)atof(token.substr(start, end - start).c_str());
 }
 
 static inline std::vector<std::string> SplitString(const std::string& s, char delim)
@@ -8275,7 +8278,7 @@ static inline std::vector<std::string> SplitString(const std::string& s, char de
 	std::vector<std::string> elems;
 
 	const char* cstr = s.c_str();
-	unsigned int strLength = s.length();
+	unsigned int strLength = (unsigned int)s.length();
 	unsigned int start = 0;
 	unsigned int end = 0;
 

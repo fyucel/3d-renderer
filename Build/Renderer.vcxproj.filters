@@ -1,64 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\Source\Renderer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\RendererAPI.h" />
-    <ClInclude Include="..\Utilities\Utilities.h">
-      <Filter>Utilities</Filter>
+    <ClInclude Include="..\Renderer\Buffers.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Buffers.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="..\Renderer\Camera.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Assets.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="..\Renderer\Renderer.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Shader.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="..\Renderer\Shader.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\AssetEnums.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="..\Renderer\Assets.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Camera.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Utilities\OBJLoader.h">
-      <Filter>Utilities</Filter>
+    <ClInclude Include="..\Renderer\Utilities.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{939c4db3-f12f-44e1-99c8-2158a82a3d6f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utilities">
-      <UniqueIdentifier>{af87383c-5a6d-4854-a917-b8dd3bf58894}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{62d4de60-3783-4a5b-8eb4-d6306dd07ae1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{939c4db3-f12f-44e1-99c8-2158a82a3d6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\Renderer.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\Renderer\Buffers.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Utilities\Utilities.cpp">
-      <Filter>Utilities</Filter>
+    <ClCompile Include="..\Renderer\Camera.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Buffers.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Assets.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\Renderer\Shader.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Shader.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\Renderer\Assets.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Camera.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="..\Renderer\Utilities.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="..\Utilities\OBJLoader.cpp">
-      <Filter>Utilities</Filter>
+    <ClCompile Include="Dependencies\GLEW\include\Tools.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -68,5 +59,6 @@
     <None Include="..\Assets\Shaders\CoreFragment.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

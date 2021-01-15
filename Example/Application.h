@@ -26,7 +26,7 @@ private:
 
 	void PanCameraWithKeyboard(IAdjustCamera* adjustCamera);
 	void MoveCameraWithMouse(IAdjustCamera* adjustCamera);
-	void ZoomCameraWithWheel(IAdjustCamera* adjustCamera,
+	void ZoomCameraWithMouseWheel(IAdjustCamera* adjustCamera,
 		int wheelDisplacement);
 
 	void FetchKeystate();
@@ -34,60 +34,43 @@ private:
 	void SecondsSinceLastFrame();
 };
 
+enum class MeshEnum
+{
+	Example,
+};
+
+enum class TextureEnum
+{
+	Example,
+};
+
 class Entity : public IEntityRenderInfo
 {
 public:
-	Entity(int meshType, int textureType) :
-		meshType{ meshType },
-		textureType{ textureType },
-		positionX{ 0.0f },
-		positionY{ 0.0f },
-		positionZ{ 0.0f },
-		rotationX{ 0.0f },
-		rotationY{ 0.0f },
-		rotationZ{ 0.0f },
-		scaleX{ 1.0f },
-		scaleY{ 1.0f },
-		scaleZ{ 1.0f } {}
+	Entity(MeshEnum meshType, TextureEnum textureType);
 
-	int MeshType() const override { return meshType; }
-	int TextureType() const override { return textureType; }
+	int MeshType() const override;
+	int TextureType() const override;
 
-	float PositionX() const override { return positionX; }
-	float PositionY() const override { return positionY; }
-	float PositionZ() const override { return positionZ; }
+	float PositionX() const override;
+	float PositionY() const override;
+	float PositionZ() const override;
 
-	float RotationX() const override { return rotationX; }
-	float RotationY() const override { return rotationY; }
-	float RotationZ() const override { return rotationZ; }
+	float RotationX() const override;
+	float RotationY() const override;
+	float RotationZ() const override;
 
-	float ScaleX() const override { return scaleX; }
-	float ScaleY() const override { return scaleY; }
-	float ScaleZ() const override { return scaleZ; }
+	float ScaleX() const override;
+	float ScaleY() const override;
+	float ScaleZ() const override;
 
-	void Position(float x, float y, float z)
-	{
-		positionX = x;
-		positionY = y;
-		positionZ = z;
-	}
-
-	void Rotation(float x, float y, float z)
-	{
-		rotationX = x;
-		rotationY = y;
-		rotationZ = z;
-	}
-
-	void Scale(float x, float y, float z)
-	{
-		scaleX = x;
-		scaleY = y;
-		scaleZ = z;
-	}
+	void Position(float x, float y, float z);
+	void Rotation(float x, float y, float z);
+	void Scale(float x, float y, float z);
 
 private:
-	int meshType, textureType;
+	MeshEnum meshType;
+	TextureEnum textureType;
 	float positionX, positionY, positionZ;
 	float rotationX, rotationY, rotationZ;
 	float scaleX, scaleY, scaleZ;
@@ -118,5 +101,7 @@ private:
 	EntityContainer entityContainer;
 	InputHandler inputHandler;
 	std::unique_ptr<IRenderer> renderer;
+
+	void LoadRendererAssets();
 };
 

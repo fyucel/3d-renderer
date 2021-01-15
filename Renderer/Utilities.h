@@ -1,6 +1,6 @@
 #pragma once
 
-// Precompiled header for the Renderer project
+// Precompiled header for the Renderer
 
 // STL headers:
 

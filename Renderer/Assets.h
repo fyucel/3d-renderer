@@ -75,17 +75,15 @@ private:
 class AssetContainer
 {
 public:
-	AssetContainer();
+	Mesh* GetMesh(int meshEnum);
+	Texture* GetTexture(int textureEnum);
 
-	Mesh* GetMesh(MeshEnum meshEnum);
-	Texture* GetTexture(TextureEnum textureEnum);
+	void LoadMesh(int meshToLoad, const std::string& filename);
+	void LoadTexture(int textureToLoad, const std::string& filename);
 
 private:
-	std::unordered_map<MeshEnum, std::unique_ptr<Mesh>> meshes;
-	std::unordered_map<TextureEnum, std::unique_ptr<Texture>> textures;
-
-	void LoadMesh(MeshEnum meshToLoad, const std::string& filename);
-	void LoadTexture(TextureEnum textureToLoad, const std::string& filename);
+	std::unordered_map<int, std::unique_ptr<Mesh>> meshes;
+	std::unordered_map<int, std::unique_ptr<Texture>> textures;
 };
 
 class OBJLoader
@@ -93,10 +91,10 @@ class OBJLoader
 public:
 	OBJLoader(const std::string& filename);
 
-	inline const std::vector<Vertex>& Vertices() const { return positions; }
+	inline const std::vector<Vertex>& Vertices() const { return vertices; }
 	inline const std::vector<unsigned int>& Indices() const { return indices; }
 
 private:
-	std::vector<Vertex> positions;
+	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 };
