@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AssetEnums.h"
 #include "Buffers.h"
 #include "Shader.h"
 

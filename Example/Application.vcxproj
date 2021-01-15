@@ -167,10 +167,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Example.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
