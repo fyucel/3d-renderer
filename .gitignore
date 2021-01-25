@@ -1,4 +1,3 @@
-*.dll
 .vs
 Build/x64
 Example/x64

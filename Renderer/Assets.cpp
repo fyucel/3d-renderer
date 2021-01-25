@@ -1,6 +1,8 @@
 #include "Utilities.h"
 #include "Assets.h"
-#include "Tools.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 Mesh::Mesh(Vertex* verticesArray, const unsigned int numVertices,
 	unsigned int* indicesArray, const unsigned int numIndices,

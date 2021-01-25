@@ -72,22 +72,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(SolutionDir)\Dependencies\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependencies\GLEW\lib\Release\x64;$(SolutionDir)\Dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(SolutionDir)\Dependencies\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependencies\GLEW\lib\Release\x64;$(SolutionDir)\Dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(SolutionDir)\Dependencies\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependencies\GLEW\lib\Release\x64;$(SolutionDir)\Dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Dependencies\GLEW\include;$(SolutionDir)\Dependencies\GLM;$(SolutionDir)\Dependencies\SDL\include;$(SolutionDir)\Dependencies\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Dependencies\GLEW\lib\Release\x64;$(SolutionDir)\Dependencies\SDL\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -195,7 +195,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Dependencies\GLEW\include\Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Assets\Shaders\CoreFragment.glsl" />
