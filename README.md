@@ -6,7 +6,7 @@ Abstracted rendering component that can be linked as a DLL to an existing C++ ap
 
 ### Usage:
 
-[`ExampleClient.cpp`](https://github.com/fyucel/3d-renderer/blob/master/Example/ExampleClient.cpp) demonstrates a client application that draws a model that the user can move around.
+[`/Example`](https://github.com/fyucel/3d-renderer/tree/master/Example) demonstrates a client application that draws a model that the user can move around.
 
 ---
 
